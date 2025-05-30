@@ -1,0 +1,118 @@
+---
+description: zasady łączenia się z chromem
+globs: 
+alwaysApply: false
+---
+# Connecting Properly to Chrome with Playwright
+
+## ✅ OPTYMALNE ROZWIĄZANIE - Chrome DevTools Protocol (CDP)
+
+**Metoda:** `chromium.connectOverCDP()` po uruchomieniu Chrome z debug portem
+
+### 🚀 Krok 1: Uruchom Chrome z debug portem
+```bash
+npm run launch-chrome
+```
+
+Lub ręcznie:
+```javascript
+// launch-chrome.js - sprawdzony kod który DZIAŁA
+const chromePath = findChrome(); // Automatycznie znajdzie Chrome
+const args = [
+    '--remote-debugging-port=9222',
+    `--user-data-dir=${userDataDir}`,
+    '--disable-popup-blocking',
+    '--disable-dev-shm-usage', 
+    '--disable-setuid-sandbox',
+    '--no-sandbox',
+    '--ignore-certificate-errors',
+    '--ignore-ssl-errors',
+    '--ignore-certificate-errors-spki-list',
+    '--enable-features=NetworkService',
+    '--no-first-run',
+    '--no-default-browser-check'
+];
+
+spawn(chromePath, args);
+```
+
+### 🔗 Krok 2: Połącz się przez CDP
+```javascript
+import { chromium } from 'playwright';
+
+const browser = await chromium.connectOverCDP('http://localhost:9222');
+const context = browser.contexts[0]; // Używamy pierwszego kontekstu
+context.setDefaultTimeout(120000); // 2 minuty timeout
+
+const page = await context.newPage();
+await page.goto('https://wp.pl');
+console.log(`📖 Tytuł: ${await page.title()}`);
+```
+
+### 💡 Dlaczego CDP jest optymalne:
+1. **Separacja procesów** - Chrome działa niezależnie
+2. **Możliwość ponownego połączenia** - jeśli skrypt się zatrzyma, Chrome dalej działa
+3. **Dostęp do istniejących sesji** - możesz używać już zalogowanych kont
+4. **Stabilność** - Chrome nie zostanie zamknięty gdy skrypt się kończy
+5. **Kontrola nad cyklem życia** - możesz zarządzać Chrome niezależnie
+6. **Debugowanie** - http://localhost:9222 pozwala podglądać co się dzieje
+
+## ✅ SPRAWDZONE ARGUMENTY CHROME
+
+Te argumenty są przetestowane i działają idealnie:
+```javascript
+const args = [
+    '--remote-debugging-port=9222',
+    '--disable-popup-blocking',
+    '--disable-dev-shm-usage', 
+    '--disable-setuid-sandbox',
+    '--no-sandbox',
+    '--ignore-certificate-errors',
+    '--ignore-ssl-errors',
+    '--ignore-certificate-errors-spki-list',
+    '--enable-features=NetworkService',
+    '--no-first-run',
+    '--no-default-browser-check'
+];
+```
+
+## 🔄 WORKFLOW KTÓRY DZIAŁA
+
+1. **Uruchom Chrome:** `npm run launch-chrome` (raz)
+2. **Łącz się wielokrotnie:** `npm run auto` / `npm run manual`
+3. **Chrome działa w tle** - można wielokrotnie łączyć/rozłączać skrypty
+4. **Sprawdź status:** http://localhost:9222 - lista dostępnych stron
+
+## ❌ ALTERNATYWNE METODY (mniej optymalne)
+
+### `launchPersistentContext()` - drugie miejsce
+```javascript
+const browser = await chromium.launchPersistentContext(userDataDir, {
+    headless: false,
+    args: ['--disable-popup-blocking', ...]
+});
+```
+**Wady:** Zamyka Chrome gdy skrypt się kończy, mniej kontroli
+
+### `browser.launch()` - trzecie miejsce  
+**Wady:** Każde uruchomienie = nowa sesja, brak persistencji
+
+## 🎯 TRYBY PRACY
+
+### Manual Mode (`npm run manual`)
+- Nieskończony timeout
+- Pozwala na ręczne logowanie (LinkedIn, Facebook)
+- Cookies są zachowywane w `browser-data/`
+
+### Auto Mode (`npm run auto`) 
+- Automatyczna praca
+- Używa zapisanych cookies
+- Szybkie wykonanie zadań
+
+## ✅ TESTOWANE I POTWIERDZONE
+- **Status:** ✅ DZIAŁA IDEALNIE  
+- **Data:** 2024
+- **Środowisko:** Windows, Node.js, Playwright
+- **Testowane z:** wp.pl, n8n, HTTP server, LinkedIn, Facebook
+- **Port:** 9222 (sprawdzony)
+- **User Data:** `browser-data/` (persistent)
