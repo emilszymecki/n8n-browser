@@ -36,6 +36,11 @@ try {
     const textToWrite = payload.text || 'World';
     await page.type('[aria-label="Edytor tekstu do tworzenia treści"]', textToWrite);
     console.log(`✍️ Napisano: ${textToWrite}`);
+
+    await page.waitForTimeout(1000);
+    await page.waitForSelector('button:has-text("Publikacja")', { timeout: 5000 });
+    console.log('✅ Znaleziono przycisk wysyłania publikacji');
+
     
 } catch (error) {
     console.log('❌ Błąd podczas publikacji:', error.message);
