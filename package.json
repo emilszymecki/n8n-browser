@@ -5,11 +5,14 @@
   "main": "connect-only.js",
   "type": "module",
   "scripts": {
-    "start": "node cdp/connect-only.js auto",
-    "auto": "node cdp/connect-only.js auto",
-    "manual": "node cdp/connect-only.js manual",
+    "start": "node cdp/smart-launcher.js",
+    "launch-chrome": "node cdp/smart-launcher.js",
+    "auto": "node cdp/smart-launcher.js auto",
+    "manual": "node cdp/smart-launcher.js manual",
     "server": "node common/server.js",
-    "launch-chrome": "node cdp/launch-chrome.js",
+    "old-launch-chrome": "node cdp/launch-chrome.js",
+    "old-auto": "node cdp/connect-only.js auto",
+    "old-manual": "node cdp/connect-only.js manual",
     "launch-server": "node server/launch-server.js",
     "connect": "node server/connect-server.js auto",
     "connect-manual": "node server/connect-server.js manual"
