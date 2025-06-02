@@ -108,8 +108,9 @@ function launchChrome() {
         '--no-default-browser-check'
     ];
 
-    console.log('🎯 Uruchamiam Chrome z argumentami...');
-    
+    console.log('🎯 Argumenty Chrome:');
+    args.forEach(arg => console.log(`   ${arg}`));
+
     const chromeProcess = spawn(chromePath, args, {
         detached: true,
         stdio: 'ignore'
