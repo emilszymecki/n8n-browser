@@ -3,22 +3,11 @@
     "nodes": [
         {
             "parameters": {
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-            "typeVersion": 1.1,
-            "position": [
-                0,
-                0
-            ],
-            "id": "a8187ae5-2f63-432a-9418-1bff98fc4aba",
-            "name": "When chat message received",
-            "webhookId": "a7eec1a3-c294-428f-a554-9ecf4d4332f9"
-        },
-        {
-            "parameters": {
                 "method": "POST",
-                "url": "http://srv32.mikr.us:40071/run-script",
+                "url": "http://192.168.1.165:40071/run-script",
+                "sendQuery": true,
+                "specifyQuery": "json",
+                "jsonQuery": "{\"action\": \"wp\"}",
                 "sendBody": true,
                 "specifyBody": "json",
                 "jsonBody": "{\"action\": \"wp\"}",
@@ -32,11 +21,22 @@
             ],
             "id": "d5cc9824-bd57-46eb-bcc6-d753039e9caf",
             "name": "HTTP Request"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "a42e314f-8877-446f-972d-85790ac77ca4",
+            "name": "When clicking ‘Execute workflow’"
         }
     ],
     "pinData": {},
     "connections": {
-        "When chat message received": {
+        "When clicking ‘Execute workflow’": {
             "main": [
                 [
                     {
@@ -52,7 +52,7 @@
     "settings": {
         "executionOrder": "v1"
     },
-    "versionId": "49caae2e-5b05-4331-8112-b7b5eafd7bc2",
+    "versionId": "3d1b3165-2742-472f-9f6f-55a69f128c90",
     "meta": {
         "instanceId": "53ded08f857f946b050db7fc0e08406e455c88324648593fa4df4641082b1a77"
     },
