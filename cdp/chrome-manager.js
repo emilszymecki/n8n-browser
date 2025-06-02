@@ -2,6 +2,13 @@ import { spawn } from 'child_process';
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+// Ładuj zmienne z .env jeśli istnieje
+dotenv.config();
+
+// Konfiguracja
+const CDP_PORT = process.env.CDP_PORT || '9222';
 
 // Katalog dla danych użytkownika Chrome
 const userDataDir = path.join(process.cwd(), 'browser-data');
@@ -50,15 +57,15 @@ export function findChrome() {
 
 export async function checkChromeRunning() {
     try {
-        console.log('🔍 Sprawdzam czy Chrome działa na porcie 9222...');
-        const response = await fetch('http://localhost:9222/json/version');
+        console.log(`🔍 Sprawdzam czy Chrome działa na porcie ${CDP_PORT}...`);
+        const response = await fetch(`http://localhost:${CDP_PORT}/json/version`);
         if (response.ok) {
             const data = await response.json();
             console.log(`✅ Chrome już działa! Wersja: ${data['User-Agent']}`);
             return true;
         }
     } catch (error) {
-        console.log('❌ Chrome nie działa na porcie 9222');
+        console.log(`❌ Chrome nie działa na porcie ${CDP_PORT}`);
         return false;
     }
     return false;
@@ -72,7 +79,7 @@ export function launchChrome() {
 
     // WAŻNE: Te argumenty są kluczowe dla niewykrywalności!
     const args = [
-        '--remote-debugging-port=9222',
+        `--remote-debugging-port=${CDP_PORT}`,
         `--user-data-dir=${userDataDir}`,
         '--disable-popup-blocking',
         '--disable-dev-shm-usage', 
@@ -97,7 +104,7 @@ export function launchChrome() {
     chromeProcess.unref();
 
     console.log('✅ Chrome uruchomiony!');
-    console.log('🌐 Debug port: http://localhost:9222');
+    console.log(`🌐 Debug port: http://localhost:${CDP_PORT}`);
     console.log(`📁 User data: ${userDataDir}`);
     
     // Czekamy chwilę żeby Chrome się uruchomił

@@ -8,11 +8,19 @@
     "start_launcher": "node cdp/smart-launcher.js",
     "start_server": "node common/server.js"
   },
-  "keywords": ["n8n", "browser", "automation", "chrome", "playwright", "ssh-tunnel"],
+  "keywords": [
+    "n8n",
+    "browser",
+    "automation",
+    "chrome",
+    "playwright",
+    "ssh-tunnel"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "playwright": "^1.40.0",
-    "express": "^4.18.2"
+    "dotenv": "^16.5.0",
+    "express": "^4.18.2",
+    "playwright": "^1.40.0"
   }
-} 
+}

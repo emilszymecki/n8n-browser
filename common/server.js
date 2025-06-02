@@ -2,15 +2,30 @@ import express from 'express';
 import { exec } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+// Ładuj zmienne z .env jeśli istnieje
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 
 console.log('🌐 Starting HTTP server...');
 
+// ============ KONFIGURACJA Z .ENV ============
+const config = {
+    VPS_HOST: process.env.VPS_HOST || 'your-vps-host.com',
+    SSH_PORT: process.env.SSH_PORT || '22',
+    SSH_USER: process.env.SSH_USER || 'root', 
+    REMOTE_PORT: process.env.REMOTE_PORT || '40069',
+    LOCAL_PORT: parseInt(process.env.LOCAL_PORT) || 3000,
+    MAX_CONCURRENT_TASKS: parseInt(process.env.MAX_CONCURRENT_TASKS) || 2,
+    CDP_PORT: process.env.CDP_PORT || '9222'
+};
+
 // ============ SYSTEM KOLEJKI Z LIMITEM WSPÓŁBIEŻNOŚCI ============
 
-const MAX_CONCURRENT_TASKS = 2; // Limit współbieżności
+const MAX_CONCURRENT_TASKS = config.MAX_CONCURRENT_TASKS;
 let runningTasks = 0;
 const taskQueue = [];
 
@@ -250,7 +265,7 @@ app.get('/queue', (req, res) => {
 });
 
 // Start server
-const PORT = 3000;
+const PORT = config.LOCAL_PORT;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
     console.log(`📡 Endpointy:`);
@@ -259,8 +274,8 @@ app.listen(PORT, () => {
     console.log(`   GET  /health     - status serwera i kolejki`);
     console.log(`   GET  /queue      - status kolejki tasków`);
     console.log(`🔗 SSH Tunnel command:`);
-    console.log(`   ssh -R 40069:localhost:3000 -p 10165 root@konrad165.mikrus.xyz -N`);
-    console.log(`🌍 n8n endpoint: http://konrad165.mikrus.xyz:40069/run-script`);
+    console.log(`   ssh -R ${config.REMOTE_PORT}:localhost:${config.LOCAL_PORT} -p ${config.SSH_PORT} ${config.SSH_USER}@${config.VPS_HOST} -N`);
+    console.log(`🌍 n8n endpoint: http://${config.VPS_HOST}:${config.REMOTE_PORT}/run-script`);
     console.log(`📝 Przykład POST: {"action": "wp", "payload": {}}`);
     console.log(`⚡ Limit współbieżności: ${MAX_CONCURRENT_TASKS} tasków jednocześnie`);
 }); 

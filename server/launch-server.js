@@ -32,8 +32,8 @@ try {
     console.log(`📁 User data: ${userDataDir}`);
     
     // Zapisz endpoint do pliku
-    fs.writeFileSync('ws-endpoint.txt', wsEndpoint);
-    console.log('💾 Endpoint zapisany do ws-endpoint.txt');
+    fs.writeFileSync('server/ws-endpoint.txt', wsEndpoint);
+    console.log('💾 Endpoint zapisany do server/ws-endpoint.txt');
     
     console.log('🔗 Użyj teraz: npm run connect');
     console.log('🛑 Naciśnij Ctrl+C żeby zatrzymać server');

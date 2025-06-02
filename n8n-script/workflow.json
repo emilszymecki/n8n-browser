@@ -4,7 +4,7 @@
         {
             "parameters": {
                 "method": "POST",
-                "url": "http://192.168.1.165:40071/run-script",
+                "url": "http://[LOCAL_IP]:[TUNNEL_PORT]/run-script",
                 "sendQuery": true,
                 "specifyQuery": "json",
                 "jsonQuery": "{\"action\": \"wp\"}",
@@ -31,12 +31,12 @@
                 0
             ],
             "id": "a42e314f-8877-446f-972d-85790ac77ca4",
-            "name": "When clicking ‘Execute workflow’"
+            "name": "When clicking 'Execute workflow'"
         }
     ],
     "pinData": {},
     "connections": {
-        "When clicking ‘Execute workflow’": {
+        "When clicking 'Execute workflow'": {
             "main": [
                 [
                     {

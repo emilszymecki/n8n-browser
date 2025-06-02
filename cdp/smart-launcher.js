@@ -2,6 +2,13 @@ import { chromium } from 'playwright';
 import path from 'path';
 import { ensureChromeRunning } from './chrome-manager.js';
 import { loadAndExecuteAction, getActionFilePath } from './action-loader.js';
+import dotenv from 'dotenv';
+
+// Ładuj zmienne z .env jeśli istnieje
+dotenv.config();
+
+// Konfiguracja
+const CDP_PORT = process.env.CDP_PORT || '9222';
 
 // Parsuj argumenty: --nazwa_akcji oraz payload ze środowiska
 let actionFile = null;
@@ -47,7 +54,7 @@ console.log(`🚀 Smart Launcher - akcja: ${actionName}`);
 async function executeAction() {
     try {
         console.log('🔗 Łączę się z Chrome przez CDP...');
-        const browser = await chromium.connectOverCDP('http://localhost:9222');
+        const browser = await chromium.connectOverCDP(`http://localhost:${CDP_PORT}`);
         
         console.log('✅ Połączono z Chrome przez CDP');
         console.log(`📊 Dostępne konteksty: ${browser.contexts().length}`);

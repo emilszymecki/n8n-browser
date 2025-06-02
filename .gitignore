@@ -1,4 +1,28 @@
+# Node modules
 node_modules/
+
+# Environment variables (konfiguracja użytkownika)
+.env
+
+# Browser data (zawiera cookies, sesje)
 browser-data/
+.
+
+# WebSocket endpoints (zawierają tokeny)
+server/ws-endpoint.txt
+
+# Logi
 *.log
-ws-endpoint.txt 
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Konfiguracje IDE
+.vscode/
+.idea/
+.cursor/
+
+# Temporary files
+*.tmp
+*.temp 

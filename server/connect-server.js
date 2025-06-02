@@ -8,11 +8,11 @@ console.log(`🚀 Łączę się z Browser Server w trybie: ${mode}`);
 
 try {
     // Wczytaj WebSocket endpoint
-    if (!fs.existsSync('ws-endpoint.txt')) {
-        throw new Error('Brak pliku ws-endpoint.txt - uruchom najpierw: npm run launch-server');
+    if (!fs.existsSync('server/ws-endpoint.txt')) {
+        throw new Error('Brak pliku server/ws-endpoint.txt - uruchom najpierw: npm run launch-server');
     }
     
-    const wsEndpoint = fs.readFileSync('ws-endpoint.txt', 'utf8').trim();
+    const wsEndpoint = fs.readFileSync('server/ws-endpoint.txt', 'utf8').trim();
     console.log(`🔗 Łączę się z: ${wsEndpoint}`);
     
     // Połącz się z browser server (wysoka jakość połączenia)
