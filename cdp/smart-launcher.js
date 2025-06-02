@@ -80,6 +80,9 @@ async function main() {
         // Wykonaj akcję
         await executeAction();
         
+        console.log('🎯 Smart-launcher zakończony pomyślnie');
+        process.exit(0); // ✅ Zakończ z sukcesem
+        
     } catch (error) {
         console.error('❌ Krytyczny błąd:', error.message);
         process.exit(1);

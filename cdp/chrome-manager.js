@@ -105,7 +105,7 @@ export function launchChrome() {
         setTimeout(() => {
             console.log('⏰ Chrome powinien być już gotowy...');
             resolve();
-        }, 3000); // 3 sekundy na uruchomienie Chrome
+        }, 5000); // 5 sekund na uruchomienie Chrome (zwiększone z 3)
     });
 }
 
@@ -117,9 +117,9 @@ export async function ensureChromeRunning() {
         await launchChrome();
         
         // Poczekaj chwilę i sprawdź ponownie
-        let retries = 5;
+        let retries = 10;
         while (retries > 0) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 2000));
             if (await checkChromeRunning()) {
                 return true;
             }
