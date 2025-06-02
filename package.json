@@ -1,23 +1,14 @@
 {
-  "name": "playwright-browser-chrome",
+  "name": "n8n-browser-automation",
   "version": "1.0.0",
-  "description": "Playwright + Chrome browser connection with connectOverCDP and browserType.connect",
-  "main": "connect-only.js",
+  "description": "Browser automation system for n8n via SSH tunnel",
+  "main": "common/server.js",
   "type": "module",
   "scripts": {
-    "start": "node cdp/smart-launcher.js",
-    "launch-chrome": "node cdp/smart-launcher.js",
-    "auto": "node cdp/smart-launcher.js auto",
-    "manual": "node cdp/smart-launcher.js manual",
-    "server": "node common/server.js",
-    "old-launch-chrome": "node cdp/launch-chrome.js",
-    "old-auto": "node cdp/connect-only.js auto",
-    "old-manual": "node cdp/connect-only.js manual",
-    "launch-server": "node server/launch-server.js",
-    "connect": "node server/connect-server.js auto",
-    "connect-manual": "node server/connect-server.js manual"
+    "start_launcher": "node cdp/smart-launcher.js",
+    "start_server": "node common/server.js"
   },
-  "keywords": ["playwright", "chrome", "browser", "connectOverCDP", "browserType.connect"],
+  "keywords": ["n8n", "browser", "automation", "chrome", "playwright", "ssh-tunnel"],
   "author": "",
   "license": "ISC",
   "dependencies": {
