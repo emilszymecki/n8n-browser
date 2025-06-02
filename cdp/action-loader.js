@@ -1,9 +1,10 @@
 import path from 'path';
 import fs from 'fs';
 
-export async function loadAndExecuteAction(page, actionFilePath) {
+export async function loadAndExecuteAction(page, actionFilePath, payload = {}) {
     try {
         console.log(`📂 Ładuję akcję z: ${actionFilePath}`);
+        console.log(`📦 Payload:`, JSON.stringify(payload, null, 2));
         
         if (!fs.existsSync(actionFilePath)) {
             throw new Error(`Plik akcji nie istnieje: ${actionFilePath}`);
@@ -13,9 +14,9 @@ export async function loadAndExecuteAction(page, actionFilePath) {
         const actionCode = fs.readFileSync(actionFilePath, 'utf8');
         console.log(`📜 Załadowano kod akcji`);
         
-        // Utwórz async funkcję z kodu akcji i wykonaj ją
-        const actionFunction = new Function('page', `return (async function() { ${actionCode} })();`);
-        await actionFunction(page);
+        // Utwórz async funkcję z kodu akcji i wykonaj ją z payload
+        const actionFunction = new Function('page', 'payload', `return (async function() { ${actionCode} })();`);
+        await actionFunction(page, payload);
         
         console.log(`✅ Akcja zakończona pomyślnie`);
         
@@ -46,9 +47,9 @@ export function listAvailableActions() {
     return files;
 }
 
-export async function executeActionByName(page, actionName) {
+export async function executeActionByName(page, actionName, payload = {}) {
     const actionFilePath = path.join(process.cwd(), 'actions', `${actionName}.js`);
-    await loadAndExecuteAction(page, actionFilePath);
+    await loadAndExecuteAction(page, actionFilePath, payload);
 }
 
 export function getActionFilePath(actionName) {

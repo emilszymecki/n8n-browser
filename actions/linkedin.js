@@ -1,4 +1,9 @@
 // Idź na LinkedIn
+console.log('🔍 LinkedIn Action - Debug Info:');
+console.log('   📦 Received payload:', JSON.stringify(payload, null, 2));
+console.log('   📝 Payload type:', typeof payload);
+console.log('   📝 Payload.text:', payload?.text);
+
 await page.goto('https://linkedin.com');
 console.log('🔗 Załadowano LinkedIn');
 
@@ -27,9 +32,10 @@ try {
     await page.waitForSelector('[aria-label="Edytor tekstu do tworzenia treści"]', { timeout: 5000 });
     console.log('✅ Edytor gotowy');
     
-    // Napisz tekst
-    await page.type('[aria-label="Edytor tekstu do tworzenia treści"]', 'World');
-    console.log('✍️ Napisano: World');
+    // Napisz tekst z payload lub domyślny
+    const textToWrite = payload.text || 'World';
+    await page.type('[aria-label="Edytor tekstu do tworzenia treści"]', textToWrite);
+    console.log(`✍️ Napisano: ${textToWrite}`);
     
 } catch (error) {
     console.log('❌ Błąd podczas publikacji:', error.message);

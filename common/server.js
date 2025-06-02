@@ -62,14 +62,22 @@ async function processNextTask() {
     console.log(`🎬 Rozpoczynam task ${task.id}: ${task.action} (${runningTasks}/${MAX_CONCURRENT_TASKS})`);
     console.log(`📊 Kolejka: ${taskQueue.length} czeka, ${runningTasks} działa`);
 
-    // Skonstruuj komendę dla smart-launcher
+    // Skonstruuj komendę dla smart-launcher z payload
+    // Zamiast przekazywać przez command line (problemy z escaping), 
+    // przekażemy przez zmienną środowiskową
+    const payloadJson = JSON.stringify(task.payload);
     const command = `node cdp/smart-launcher.js --${task.action}`;
     console.log(`📜 Komenda: ${command}`);
+    console.log(`📦 Payload JSON: ${payloadJson}`);
 
     // Uruchom smart-launcher z akcją
     exec(command, {
         cwd: process.cwd(),
-        timeout: 300000 // 5 minut timeout (zwiększone z 2 minut)
+        timeout: 300000, // 5 minut timeout (zwiększone z 2 minut)
+        env: { 
+            ...process.env, 
+            N8N_PAYLOAD: payloadJson 
+        }
     }, (error, stdout, stderr) => {
         
         task.endTime = Date.now();
@@ -135,9 +143,15 @@ async function processNextTask() {
 
 // Endpoint do uruchamiania akcji z kolejką
 app.post('/run-script', (req, res) => {
-    console.log('📨 Otrzymano POST request:', req.body);
+    console.log('📨 Otrzymano POST request:');
+    console.log('   📋 Body:', JSON.stringify(req.body, null, 2));
+    console.log('   📋 Headers:', JSON.stringify(req.headers, null, 2));
     
     const { action, payload = {} } = req.body;
+    
+    console.log('📦 Rozparsowane dane:');
+    console.log('   🎬 Action:', action);
+    console.log('   📦 Payload:', JSON.stringify(payload, null, 2));
     
     if (!action) {
         console.log('❌ Brak nazwy akcji w request');

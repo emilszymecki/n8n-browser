@@ -3,13 +3,29 @@ import path from 'path';
 import { ensureChromeRunning } from './chrome-manager.js';
 import { loadAndExecuteAction, getActionFilePath } from './action-loader.js';
 
-// Parsuj argumenty: --nazwa_akcji
+// Parsuj argumenty: --nazwa_akcji oraz payload ze środowiska
 let actionFile = null;
 let actionName = null;
+let payload = {};
 
-// Sprawdź argumenty - oczekujemy tylko --nazwa_akcji
+// Sprawdź zmienną środowiskową dla payload
+if (process.env.N8N_PAYLOAD) {
+    console.log(`🔍 Raw payload from env: "${process.env.N8N_PAYLOAD}"`);
+    try {
+        payload = JSON.parse(process.env.N8N_PAYLOAD);
+        console.log(`📦 Parsed payload from env:`, JSON.stringify(payload, null, 2));
+    } catch (e) {
+        console.log(`❌ Błędny JSON w zmiennej środowiskowej N8N_PAYLOAD: "${process.env.N8N_PAYLOAD}"`);
+        console.log(`🔍 Error details:`, e.message);
+        console.log(`💡 Używam pustego payload`);
+        payload = {};
+    }
+}
+
+// Sprawdź argumenty
 const args = process.argv.slice(2);
-for (const arg of args) {
+for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
     if (arg.startsWith('--')) {
         // To jest akcja (np. --wp)
         actionName = arg.substring(2);
@@ -55,7 +71,7 @@ async function executeAction() {
         
         try {
             // Wykonaj akcję z pliku
-            await loadAndExecuteAction(page, actionFile);
+            await loadAndExecuteAction(page, actionFile, payload);
             console.log('✅ Akcja zakończona pomyślnie');
         } finally {
             // Zamknij tylko stronę, nie browser
