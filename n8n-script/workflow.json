@@ -1,0 +1,61 @@
+{
+    "name": "My workflow 2",
+    "nodes": [
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "a8187ae5-2f63-432a-9418-1bff98fc4aba",
+            "name": "When chat message received",
+            "webhookId": "a7eec1a3-c294-428f-a554-9ecf4d4332f9"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://srv32.mikr.us:40071/run-script",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "{\"action\": \"wp\"}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "d5cc9824-bd57-46eb-bcc6-d753039e9caf",
+            "name": "HTTP Request"
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "versionId": "49caae2e-5b05-4331-8112-b7b5eafd7bc2",
+    "meta": {
+        "instanceId": "53ded08f857f946b050db7fc0e08406e455c88324648593fa4df4641082b1a77"
+    },
+    "id": "NaqZgWtUCZstMwmM",
+    "tags": []
+}
